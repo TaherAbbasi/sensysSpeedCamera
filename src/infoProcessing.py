@@ -183,7 +183,6 @@ class violationProcessing():
         return self.finalInfo
         
         
-
     def setCameraName(self, cameraNameLevel):
         '''sets camera name based on violation path and camera name level
         '''

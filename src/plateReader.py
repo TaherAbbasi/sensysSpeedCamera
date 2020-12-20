@@ -18,7 +18,7 @@ class plateReader():
             if message:
                 message.delete()
             else:
-                break       
+                break
         image = Image.fromarray(cvImage)
         buffered = BytesIO()
         image.save(buffered, format="PNG")
@@ -35,4 +35,6 @@ class plateReader():
             return data
         else:
             return None
-            
+    
+
+    # def 
