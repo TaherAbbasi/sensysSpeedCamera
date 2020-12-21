@@ -1,8 +1,8 @@
 from os import path
-from dbHandling import dbHandling
-from configLoading import configLoading
-from infoProcessing import violationProcessing
-from fileManaging import fileManaging
+from .core.dbHandling import dbHandling
+from .core.configLoading import configLoading
+from .core.infoProcessing import violationProcessing
+from .core.fileManaging import fileManaging
 configPath = path.abspath(path.join(path.dirname(__file__), "..", "configs", "configs.ini"))
 
 configLoader = configLoading(configPath)
@@ -13,6 +13,5 @@ files = fileManager.listViolations()
     
 processor = violationProcessing(dbHandler, configLoader)
 testPath = ''
-# processor.process(files[0])
 for f in files:
     processor.process(f)
