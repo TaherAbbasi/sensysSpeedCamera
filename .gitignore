@@ -1,6 +1,6 @@
 __pycache__
 *.pyc
-configs.ini
+configs
 .installed.cfg
 bin
 develop-eggs
