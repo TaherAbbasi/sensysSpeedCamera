@@ -11,7 +11,7 @@ configLoader = configLoading(configPath)
 dbHandler = dbHandling(configLoader)
 
 processor = violationProcessing(dbHandler, configLoader)
-cameraNameEn = 'RATASHE'
+cameraNameEn = 'SampleCameraName'
 homoMat = processor.calculateHomographyMatrice(cameraNameEn)
 homoMatFileName = path.join(configDirPath, cameraNameEn)
 # print(homoMat)

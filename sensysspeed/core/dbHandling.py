@@ -12,12 +12,15 @@ from shutil import copy2
 import logging
 import ast
 import numpy as np
+from sensysspeed.core.exceptions import ConfigLoadingError, DatabaseConnectionError
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 class dbHandling():
 
     def __init__(self, configLoader):
+
+        self.configLoader = configLoader
 
         try:
             self.host = configLoader.get('database', 'host')
@@ -26,8 +29,8 @@ class dbHandling():
             self.dbName = configLoader.get('database', 'dbName')
             self.characterSet = configLoader.get('database', 'characterSet')
             self.collation = configLoader.get('database', 'collation')
-        except Exception as e:
-            logging.info(f'Problem in loading configs from config file: {e}')
+        except ConfigLoadingError as e:
+            logging.info(ConfigLoadingError)
             return None            
 
         try:
@@ -38,9 +41,17 @@ class dbHandling():
                 database=self.dbName
             )
         except Exception as e:
-            logging.info(f'Problem in connecting to databse: {e}')
+            logging.info(e)
             self.createDB()
-            
+            try:
+                self.db = mysql.connector.connect(
+                    host=self.host,
+                    user=self.username,
+                    passwd=self.password,
+                    database=self.dbName
+                )
+            except Exception as e:
+                logging.info(e)
 
     def createDbTables(self):
         try:
@@ -101,6 +112,7 @@ class dbHandling():
                 '''
         cursor.execute(sqlCommand)
         self.db.commit()
+    
     def insertViolation(self, violationInfo):
         cursur = self.db.cursor()
         sqlCommand = '''INSERT INTO violations 
@@ -144,7 +156,6 @@ class dbHandling():
         except Exception as e:
             logging.info(f'Insert Camera Exception: {e}')
 
-
     def insertViolations(self, violationsInfo):
         pass
 
@@ -152,7 +163,8 @@ class dbHandling():
         isCameraInserted = False
         try:
             cursor = self.db.cursor()
-            sql = 'INSERT INTO cameras (nameEn, nameFa, policeCode, deviceId, homographyMatrice) VALUES (%s, %s, %s, %s, %s)'
+            sql = 'INSERT INTO cameras (nameEn, nameFa, policeCode, \
+                 deviceId, homographyMatrice) VALUES (%s, %s, %s, %s, %s)'
             cursor.execute(sql, cameraInfo)
             cursor.close()
             self.db.commit()
@@ -181,7 +193,6 @@ class dbHandling():
             logging.info(f'Problem in inserting violation type: {e}')
         
         return isViolationTypeInserted
-
 
     def getViolations(self, state='All', cameraName='All' , fromDate='2015-01-01', toDate='2030-01-01'):
         '''
@@ -221,7 +232,6 @@ class dbHandling():
                 logging.info(f'Camera info is wrong: {e}')
         return camerasInfo
 
-
     def createDB(self):
         '''it creates database dbSpeed if not exists
         '''
@@ -243,12 +253,10 @@ class dbHandling():
         except Exception as e:
             logging.info(f'Problem in creating database: {e}')
 
-
-    def updateCamera(self,cameraNameEn, homoMat):
+    def updateCamera(self, cameraNameEn, homoMat):
         '''
         '''
         cursor = self.db.cursor()
         sqlCommand = 'update cameras set homographyMatrice = %s WHERE nameEn = %s'
         cursor.execute(sqlCommand, (homoMat, cameraNameEn))
         self.db.commit()
-

@@ -34,7 +34,6 @@ class fileManaging():
             logging.info(f'TarFileLevel in config file must be an integer: {e}')
             return None
 
-
     def archive(self, srcFilePath, extractionPath):
         '''It moves files from srcpath to extractionPath
         '''        
@@ -47,7 +46,6 @@ class fileManaging():
         except Exception as e:
             logging.info(f'Problem in archiving file: {e}')
         return isArchived
-
 
     def setFilesPath(self, extractionPath):
         '''It set xml file path and image file path and

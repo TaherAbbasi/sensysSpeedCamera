@@ -12,21 +12,20 @@ Python 3.6 or later with all [requirements.txt](https://github.com/TaherAbbasi/r
 $ pip install -r requirements.txt
 ```
 
-## How To Install
+## What is Sensys speed camera 
+Sensys speed camera is a speed violation detection camera. It detects speed violations by using a radar and a camera. The radar detects the violator and then triggers the camera to capture. then the violation info are inserted in an xml file. afterwards, the xml file and the captured image will be zipped and will be FTPed to an ftp serevr. 
 
-detect.py runs inference on a variety of sources, downloading models automatically from the [latest YOLOv3 release](https://github.com/ultralytics/yolov3/releases) and saving results to `runs/detect`.
+##In this project
+We process the xml file and based on the xml file information we do some processing and sends them to a traffic control center. The processing include:
+1- Since the radar give the violator information in the real world(in meters), We Transform the real world coordination to image coordination. Then we know where is the violator in the image. In order ro do that, firstly, for every camera a homography matrix have to be calculated.
+2- Since sensys camera doesn't read plate number, we developed an alpr engine and dockerized it. (it is no included in this project yet.)
+3- Add footer or header to the image.
+
+## How to use
+1- Installing Python, XAMPP, and other requirement.
+2- set the configs in /resource/config.ini
+3- set the camera information in an excel file in resources in an excel file. A sample file named cameraInfo.xlsx in in resources.
+4- in the root directory:
 ```bash
-$ python detect.py --source 0  # webcam
-                            file.jpg  # image 
-                            file.mp4  # video
-                            path/  # directory
-                            path/*.jpg  # glob
-                            rtsp://170.93.143.139/rtplive/470011e600ef003a004ee33696235daa  # rtsp stream
-                            rtmp://192.168.1.105/live/test  # rtmp stream
-                            http://112.50.243.8/PLTV/88888888/224/3221225900/1.m3u8  # http stream
+$ python start.py
 ```
-
-To run inference on example images in `data/images`:
-```bash
-$ python detect.py --source data/images --weights yolov3.pt --conf 0.25
-

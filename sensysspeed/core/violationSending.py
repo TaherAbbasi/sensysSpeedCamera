@@ -41,10 +41,9 @@ class violationSending():
                 }
                 self.dataHeaders['x-auth-token'] = requests.post(self.getTokenUrl, data=self.tokenBody, headers = self.tokenHeaders)
             except Exception as e:
-                logging.info(f'Problem in setting token: {e}')
+                logging.info(f'Problem in establishing a connection.')
 
             configLoader.write('ReceiverServer', 'token')                
-
 
     def send(self, violationInfo):
 
@@ -73,7 +72,7 @@ class violationSending():
         try:
             response = requests.post(self.dataUrl, data=TToInfo, headers = self.dataHeaders)
         except Exception as e:
-            logging.info('Problem in sending. Probably the dataUrl is not correct: {e}')
+            logging.info('Couldn\'t ceonnect to: {self.dataUrl}. Probably the dataUrl is not correct.')
             message = 'Sent but no response'
 
         if not response:
