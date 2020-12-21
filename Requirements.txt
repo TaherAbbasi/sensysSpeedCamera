@@ -1,0 +1,9 @@
+nose
+arabic-reshaper
+numpy
+python-bidi
+Pillow
+opencv-python
+sqlalchemy
+configparser
+mysql-connector-python
