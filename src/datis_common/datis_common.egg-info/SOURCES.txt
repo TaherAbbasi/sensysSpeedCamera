@@ -1,5 +1,0 @@
-datis_common/__init__.py
-datis_common.egg-info/PKG-INFO
-datis_common.egg-info/SOURCES.txt
-datis_common.egg-info/dependency_links.txt
-datis_common.egg-info/top_level.txt
