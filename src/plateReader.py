@@ -5,10 +5,10 @@ from PIL import Image
 from pystalkd.Beanstalkd import Connection
 
 class plateReader():
-    def __init__(self):
-        self.image_producer = Connection("localhost", 14714)
+    def __init__(self, host='localhost', port=14714):
+        self.image_producer = Connection(host, port)
         self.image_producer.use("image")
-        self.result_consumer = Connection("localhost", 14714)
+        self.result_consumer = Connection(host, port)
         self.result_consumer.watch("result")
 
 
@@ -26,7 +26,7 @@ class plateReader():
         img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
 
         self.image_producer.put(img_str)
-        ## sample snipet code for recieving result
+        ## sample snippet code for recieving result
         # print("data wait")
         message = self.result_consumer.reserve(timeout=10)
         if message:

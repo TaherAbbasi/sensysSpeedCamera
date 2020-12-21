@@ -724,5 +724,6 @@ class violationProcessing():
         elif thresholds[2] < speedDiff <= thresholds[3]:
             violationCode = 2002
         else:
-            logging.info(f'violation code is not set: \n Vehicle speed: {vehicleSpeed}, Sign speed: {signSpeed}')
+            logging.info(f'violation code is not set: \n Vehicle \
+                    speed: {vehicleSpeed}, Sign speed: {signSpeed}')
         return violationCode

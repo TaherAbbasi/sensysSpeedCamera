@@ -36,7 +36,8 @@ class fileManaging():
 
 
     def archive(self, srcFilePath, extractionPath):
-        
+        '''It moves files from srcpath to extractionPath
+        '''        
         isArchived = False
         tarFileName = srcFilePath.split(os.sep)[-1]
         dstFilePath = os.path.join(extractionPath, tarFileName)
@@ -103,7 +104,7 @@ class fileManaging():
             return isLarge, largeImagePath
     
     def listViolations(self):
-
+        '''lists all violations in the ftpPath'''
         filesPath = self.ftpPath
         for _ in itertools.repeat(None, self.tarFileLevel):
             filesPath = os.path.join(filesPath,'*')
@@ -119,11 +120,13 @@ class fileManaging():
         try:
             tarFile = tarfile.open(violationFilePath)
             violationDirName, _ = os.path.splitext(violationFilePath)
-            extractionPath = Path(violationDirName.replace(self.ftpPath, self.archivePath))
+            extractionPath = Path(violationDirName.replace(self.ftpPath,
+                                     self.archivePath))
             tarFile.extractall(extractionPath)
             tarFile.close()
         except:
-            logging.info(f'Problem in extracting tar file: {violationFilePath}\n Extraction Path: {extractionPath}')
+            logging.info(f'Problem in extracting tar file: \
+                {violationFilePath}\n Extraction Path: {extractionPath}')
         
         return extractionPath
 

@@ -88,21 +88,7 @@ class violationSending():
         '''
         try:
             response = response.json()
+            return response
         except Exception as e:
             logging.info(f'Problem in parsing host response: {e}')
-        
-
-        return responseCode, message
-    #     if 'RowId' in content:
-    #         content = json.loads(content)
-    #         response_token = content['RowId']
-    #         return response_code, response_token
-    #     elif 'message' in content:
-    #         content = json.loads(content)
-    #         response_token = content['message']
-    #         print(response_token)
-    #         return response_code, response_token
-    #     else:
-    #         print('Unknown')
-    # except:
-    #     return response_code, 'Error in parsing content'
+            return 'No Response'
