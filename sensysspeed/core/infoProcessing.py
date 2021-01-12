@@ -4,10 +4,12 @@ from sensysspeed.core.fileManaging import fileManaging
 from sensysspeed.core.plateReader import plateReader
 from sensysspeed.core.violationSending import violationSending
 
-
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 class violationProcessing():
+    '''Process tar file violations for sensys camera.
+    '''
+    
     def __init__(self, dbHandler, configLoader):
         '''it get config path and sets the basic data
         '''
@@ -342,7 +344,6 @@ class violationProcessing():
         '''It get messages coming from datis alpr docker
         and returns plate detections, and ocr.
         '''
-        
         assert isinstance(alprMessage, str), 'string is expected: %r' % alprMessage
         
         try:
@@ -373,7 +374,9 @@ class violationProcessing():
         return plateDetections
 
     def mapToOriginalImage(self, detections):
-        
+        '''get detections from datis alpr and maps them
+           to the original image.
+        '''
         mappedDetections = []
         try:
             for d in detections:
@@ -387,7 +390,9 @@ class violationProcessing():
         return mappedDetections
 
     def fittestPlate(self, roiCenter, plateDetections):
-        
+        '''based on the xml file, it finds the
+           plate of violator.
+        '''
         roiCenter = tuple(roiCenter)
         minDistance = float('inf')
         targetDetection = None
@@ -410,7 +415,6 @@ class violationProcessing():
            of the camera. it lists all violations in ftp path and selects 
            noOfViolations of them for calculating homography matrice. n
         '''
-        
         self.finalInfo = {}
         self.imagePoints = []
         self.realPoints = []
@@ -496,6 +500,8 @@ class violationProcessing():
         return self.HomographyMatrice
 
     def click(self, event, x, y, flags, param):
+        ''' a mouse callback.
+        '''
         if event == cv2.EVENT_LBUTTONUP:
             currentImagePoint = [ceil(x*self.invScaleFactor[0]),ceil(y*self.invScaleFactor[1])]
             self.currentImagePoint = [float(x) for x in currentImagePoint]
@@ -671,7 +677,6 @@ class violationProcessing():
         '''Based on the violator vehicle speed and signSpeed it 
            takes decision about the violation code and returns it.
         '''
-        
         speedDiff = vehicleSpeed - signSpeed
         thresholds = [0,30,50, 10000]
         violationCode = None
