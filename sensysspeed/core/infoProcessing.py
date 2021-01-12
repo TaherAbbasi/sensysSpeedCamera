@@ -1,21 +1,6 @@
-import pickle
-import xmltodict
-import pathlib
 import logging
-import os
 import tarfile
-import numpy as np
-import ast
-from cv2 import cv2
-from os.path import splitext
-from pathlib import Path
-from datetime import datetime
-from math import ceil
-from os import path
 from sensysspeed.core.fileManaging import fileManaging
-from sensysspeed.core.configLoading import configLoading
-from sensysspeed.utils.getImageSize import get_image_size as getImageSize
-from sensysspeed.utils.getImageSize import UnknownImageFormat
 from sensysspeed.core.plateReader import plateReader
 from sensysspeed.core.violationSending import violationSending
 
