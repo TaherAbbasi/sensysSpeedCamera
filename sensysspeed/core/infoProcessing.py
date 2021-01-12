@@ -1,5 +1,4 @@
 import pickle
-# import pyautogui
 import xmltodict
 import pathlib
 import logging
@@ -24,10 +23,8 @@ from sensysspeed.core.violationSending import violationSending
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 class violationProcessing():
-    def __init__(self,
-                 dbHandler,
-                 configLoader):
-        '''it get confgi path and sets the basic data
+    def __init__(self, dbHandler, configLoader):
+        '''it get config path and sets the basic data
         '''
         self.camerasInfo = dbHandler.getCamerasInfo()
         if not self.camerasInfo:
@@ -62,8 +59,10 @@ class violationProcessing():
             # return None
 
     def process(self, violationFilePath):
-        # assert isinstance(violationFilePath, str), 'string is expected: %r' % violationFilePath
-        # assert tarfile.is_tarfile(violationFilePath), 'Not a tar file: %r' % violationFilePath
+        '''This function is responsible for processing a violation.
+        '''
+        assert isinstance(violationFilePath, str), 'string is expected: %r' % violationFilePath
+        assert tarfile.is_tarfile(violationFilePath), 'Not a tar file: %r' % violationFilePath
 
         self.violationFilePath = os.path.normpath(violationFilePath)
         self.finalInfo = {}
@@ -297,11 +296,6 @@ class violationProcessing():
         '''
         isPlatePointSet = False
         realWorldPoint = self.finalInfo['distance']
-        # print(realWolrdPoint)
-        # realWorldPoint = np.array([[realWolrdPoint['distWidth'], realWolrdPoint['distHeight']]], dtype='float32')
-        # realWorldPoint = np.array([realWorldPoint])
-        # imgPoint = cv2.perspectiveTransform(realWorldPoint, self.homographyMatrice)
-        # return [ceil(imgPoint[0][0][0]), ceil(imgPoint[0][0][1])]
         realWorldPoint = [self.finalInfo['distance']['distX'], self.finalInfo['distance']['distX']]
         realWorldPoint = np.array([[realWorldPoint]], dtype='float32')
         
@@ -363,9 +357,8 @@ class violationProcessing():
         '''It get messages coming from datis alpr docker
         and returns plate detections, and ocr.
         '''
+        
         assert isinstance(alprMessage, str), 'string is expected: %r' % alprMessage
-
-        # ROIs = [{"label": "person", "confidence": 0.8289788365364075, "topleft": {"x": 1251, "y": 406}, "bottomright": {"x": 1448, "y": 543}}, {"label": "person", "confidence": 0.8241226673126221, "topleft": {"x": 1505, "y": 498}, "bottomright": {"x": 1730, "y": 694}}, {"label": "plate", "confidence": 0.7091344594955444, "topleft": {"x": 1556, "y": 627}, "bottomright": {"x": 1641, "y": 663}, "ocr": "27S58928"}]
         
         try:
             alprMessage = ast.literal_eval(alprMessage)
@@ -391,14 +384,6 @@ class violationProcessing():
                                         'confidence': confidence,
                                         'boundingBox': boundingBox
                                        })
-            # elif label == 'person':
-            #     boundingBox = [int(topLeft['x']),
-            #                    int(topLeft['y']), 
-            #                    int(bottomRight['x']), 
-            #                    int(bottomRight['y'])]
-            #     vehicleDetections.append({
-            #                                'boundingBox': boundingBox
-            #                               })
 
         return plateDetections
 
@@ -440,6 +425,7 @@ class violationProcessing():
            of the camera. it lists all violations in ftp path and selects 
            noOfViolations of them for calculating homography matrice. n
         '''
+        
         self.finalInfo = {}
         self.imagePoints = []
         self.realPoints = []
@@ -700,6 +686,7 @@ class violationProcessing():
         '''Based on the violator vehicle speed and signSpeed it 
            takes decision about the violation code and returns it.
         '''
+        
         speedDiff = vehicleSpeed - signSpeed
         thresholds = [0,30,50, 10000]
         violationCode = None
